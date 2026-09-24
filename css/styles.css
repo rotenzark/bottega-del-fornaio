@@ -1,0 +1,267 @@
+/* La Bottega del Fornaio · Niguarda — «Un po' di tutto.»
+   La frase è dei clienti (11 recensioni su 34). Il sito è la loro vetrina a mensole: ogni famiglia
+   di cose sta su una mensola, coi cartellini arancioni dei loro scaffali. La firma sono le lancette:
+   il cartello rosso a quattro orologi della loro porta, rifatto in CSS, e un orologio vivo in apertura.
+   Palette: l'arancio dell'insegna, il rosso del cartello, la notte della facciata di sera. */
+
+/* ── reset tecnico (PLUMBING) ── */
+[hidden]{display:none !important}
+img{max-width:100%;height:auto}
+*,*::before,*::after{box-sizing:border-box}
+
+:root{
+  --notte:#2A1B12; --notte-scura:#1B110B; --legno:#8C5A2B;
+  --arancio:#E8671C; --arancio-chiaro:#F7A11B; --arancio-scuro:#B84D10;
+  --rosso:#C4161C; --rosso-scuro:#9E1015;
+  --crema:#FBF5EA; --crema-scura:#F1E6D2; --bianco:#FFFFFF;
+  --grafite:#231710; --grigio:#6A5A4E; --grigio-chiaro:#C9BCAD;
+  --f-script:'Allura','Brush Script MT',cursive;
+  --f-txt:'Radio Canada',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --lato:clamp(1.2rem,6vw,6rem);
+  --testata:68px;
+  --dodeca:50% 0%,75% 6.7%,93.3% 25%,100% 50%,93.3% 75%,75% 93.3%,50% 100%,25% 93.3%,6.7% 75%,0% 50%,6.7% 25%,25% 6.7%;
+}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--testata) + 8px)}
+body{margin:0;font-family:var(--f-txt);font-size:1.06rem;line-height:1.62;color:var(--grafite);background:var(--crema);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--f-txt);font-weight:700;line-height:1.05;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(2rem,4.4vw,3.4rem)}
+h3{font-size:clamp(1.35rem,2.1vw,1.7rem)}
+p{margin:0 0 1em}
+b,strong{font-weight:700}
+:focus-visible{outline:3px solid var(--arancio-chiaro);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* reveal: stato iniziale solo dietro .js (anti-flash) */
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+.js .reveal.in-view{opacity:1;transform:none}
+html:not(.js) .reveal{opacity:1;transform:none}
+
+/* ── l'insegna: la fascia arancione col nome in corsivo, come sopra la vetrina ── */
+.insegna{display:inline-block;margin:0;padding:.28em 1em .42em;border-radius:10px;background:linear-gradient(100deg,var(--arancio-chiaro),var(--arancio) 68%,#DB5A17);color:#3B1F0E;font-family:var(--f-script);font-weight:400;font-size:clamp(2.4rem,5.5vw,4.6rem);line-height:1;letter-spacing:.01em;white-space:nowrap;box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),0 0 42px rgba(247,161,27,.55),0 18px 40px rgba(0,0,0,.35);text-shadow:0 1px 0 rgba(255,255,255,.28)}
+
+/* ── intro: la facciata al buio, l'insegna si accende ── */
+.intro{position:fixed;inset:0;z-index:300;display:grid;place-content:center;justify-items:center;gap:1.6rem;padding:1rem;background:#120A06;color:var(--crema);transition:opacity .6s,visibility .6s}
+.intro.hide{opacity:0;visibility:hidden}
+.intro__insegna{max-width:100%;font-size:clamp(2rem,8vw,5rem);white-space:normal;text-align:center;animation:accende 1.5s steps(1,end) both}
+@keyframes accende{0%{filter:brightness(.12);box-shadow:none}18%{filter:brightness(1)}26%{filter:brightness(.18);box-shadow:none}38%{filter:brightness(1)}46%{filter:brightness(.4)}56%,100%{filter:brightness(1)}}
+.intro__skip{background:none;border:0;color:rgba(251,245,234,.75);font:inherit;font-weight:600;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+
+/* ── testata (fondo pieno, NIENTE backdrop-filter) ── */
+.testata{position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;gap:1rem;height:var(--testata);padding:0 clamp(1rem,4vw,3rem);background:var(--notte);color:var(--crema);border-bottom:3px solid var(--arancio);max-width:100%;overflow:hidden}
+.marchio{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;line-height:1;white-space:nowrap;min-width:0}
+.marchio__insegna{display:inline-block;padding:.12em .55em .22em;border-radius:6px;background:linear-gradient(100deg,var(--arancio-chiaro),var(--arancio));color:#3B1F0E;font-family:var(--f-script);font-size:1.6rem;line-height:1;box-shadow:0 0 14px rgba(247,161,27,.45)}
+.marchio__s{font-size:.78rem;font-weight:500;color:var(--grigio-chiaro);letter-spacing:.02em}
+.nav{display:flex;gap:clamp(.8rem,1.8vw,1.5rem)}
+.nav a{font-weight:500;font-size:.95rem;text-decoration:none;padding:.2em 0;border-bottom:3px solid transparent;white-space:nowrap}
+.nav a:hover{border-bottom-color:var(--arancio-chiaro)}
+.testata__coda{display:flex;align-items:center;gap:.8rem;flex:none;min-width:0}
+.lingue{display:flex;border:1.5px solid rgba(251,245,234,.55);border-radius:999px;overflow:hidden}
+.lingue button{background:none;border:0;color:var(--crema);font-family:var(--f-txt);font-weight:700;font-size:.8rem;letter-spacing:.06em;padding:.35em .7em;cursor:pointer;opacity:.65}
+.lingue button.is-on{background:var(--arancio-chiaro);color:var(--notte);opacity:1}
+.burger{display:none;position:relative;z-index:96;width:44px;height:44px;margin-right:-8px;padding:0;background:none;border:0;cursor:pointer}
+.burger span{display:block;width:26px;height:3px;margin:5px auto;background:var(--crema);border-radius:3px;transition:transform .25s,opacity .25s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.drawer{position:fixed;inset:var(--testata) 0 0 0;z-index:89;display:flex;flex-direction:column;gap:.2rem;padding:2rem var(--lato);background:var(--notte-scura);color:var(--crema);overflow-y:auto}
+.drawer a{font-weight:700;font-size:clamp(1.8rem,8vw,3rem);letter-spacing:-.02em;text-decoration:none;line-height:1.15;border-bottom:1px solid rgba(251,245,234,.18);padding:.25em 0}
+.drawer a.drawer__cta{margin-top:1.4rem;border:0;color:var(--arancio-chiaro);font-weight:600;font-size:clamp(1.2rem,5vw,1.6rem);letter-spacing:0}
+
+/* ── bottoni ── */
+.bottone{display:inline-flex;align-items:center;justify-content:center;gap:.5em;padding:.9em 1.5em;font-family:var(--f-txt);font-weight:600;font-size:1rem;text-decoration:none;border:2px solid transparent;border-radius:999px;line-height:1;transition:transform .2s,background-color .2s,color .2s,border-color .2s}
+.bottone:hover{transform:translateY(-2px)}
+.bottone--insegna{background:linear-gradient(100deg,var(--arancio-chiaro),var(--arancio));color:#3B1F0E;box-shadow:0 0 22px rgba(247,161,27,.35)}
+.bottone--crema{background:transparent;border-color:rgba(251,245,234,.6);color:var(--crema)}
+.bottone--crema:hover{background:rgba(251,245,234,.1)}
+.bottone--scuro{background:var(--notte);color:var(--crema)}
+
+/* ── gli orologi (la firma): il quadrante bianco a dodici lati sul rosso, le lancette nere ── */
+.orologio{--d:120px;position:relative;display:inline-block;width:var(--d);height:var(--d);clip-path:polygon(var(--dodeca));background:#fff;flex:none;vertical-align:middle}
+.orologio::before{content:"";position:absolute;inset:3.5%;clip-path:polygon(var(--dodeca));background:var(--rosso)}
+.orologio::after{content:"";position:absolute;inset:6.5%;clip-path:polygon(var(--dodeca));background:#fff}
+.orologio__faccia{position:absolute;inset:9.5%;clip-path:polygon(var(--dodeca));background:var(--rosso);z-index:1}
+.orologio__faccia b{position:absolute;left:50%;top:50%;width:1.6em;margin:-.7em 0 0 -.8em;text-align:center;color:#fff;font-weight:700;font-size:calc(var(--d)*.1);line-height:1.4;transform:rotate(calc(var(--i)*30deg)) translateY(calc(var(--d)*-.315)) rotate(calc(var(--i)*-30deg))}
+.lancetta{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;background:#1A0E08;border-radius:999px;z-index:2}
+.lancetta::after{content:"";position:absolute;left:50%;top:9%;width:62%;padding-top:62%;transform:translateX(-50%);border-radius:50%;background:#B3372A}
+.lancetta--ore{width:calc(var(--d)*.062);height:calc(var(--d)*.235);transform:translateX(-50%) rotate(var(--ore,0deg))}
+.lancetta--minuti{width:calc(var(--d)*.052);height:calc(var(--d)*.325);transform:translateX(-50%) rotate(var(--min,0deg))}
+.lancetta--secondi{width:calc(var(--d)*.02);height:calc(var(--d)*.36);background:var(--arancio-chiaro);transform:translateX(-50%) rotate(var(--sec,0deg));transition:transform .18s cubic-bezier(.3,1.4,.5,1);z-index:3}
+.lancetta--secondi::after{display:none}
+.perno{position:absolute;left:50%;top:50%;width:calc(var(--d)*.075);height:calc(var(--d)*.075);transform:translate(-50%,-50%);border-radius:50%;background:#fff;box-shadow:0 0 0 2px #1A0E08;z-index:4}
+.orologio__ora{display:block;margin-top:.2rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--arancio-chiaro);font-size:1.1rem}
+
+/* ── apertura: la notte, l'insegna accesa, l'orologio vivo ── */
+.apertura{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;min-height:calc(100vh - var(--testata));padding:clamp(2rem,5vw,4rem) var(--lato) clamp(2.5rem,6vw,5rem);background:radial-gradient(120% 80% at 30% 0%,#3F2917 0,var(--notte) 55%);color:var(--crema)}
+.apertura__insegna{margin-bottom:1.6rem;max-width:100%;white-space:nowrap;font-size:clamp(2rem,4.2vw,3.6rem)}
+.apertura__kicker{margin:0 0 .8rem;font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--arancio-chiaro)}
+.apertura__h{font-size:clamp(3rem,7.5vw,6.4rem);letter-spacing:-.035em;line-height:.95;margin-bottom:.35em}
+.apertura__sub{font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:36rem;color:rgba(251,245,234,.88)}
+.apertura__sub em{font-style:normal;color:var(--arancio-chiaro)}
+.apertura__ora{display:flex;align-items:center;gap:1.1rem;margin:1.4rem 0 1.4rem}
+.apertura__ora .orologio{--d:104px;box-shadow:0 14px 30px rgba(0,0,0,.4)}
+.apertura__adesso{display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--arancio-chiaro)}
+.apertura__stato{margin:.15rem 0 0;font-weight:700;font-size:1.05rem}
+.apertura__azioni{display:flex;flex-wrap:wrap;gap:.8rem}
+.apertura__badge{margin:1.1rem 0 0;font-size:.95rem;color:rgba(251,245,234,.8)}
+.apertura__foto{margin:0;border-radius:18px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.5);background:#000}
+.apertura__foto img{width:100%;height:auto}
+.apertura__foto figcaption{padding:.6rem .9rem;font-size:.85rem;color:rgba(251,245,234,.75);background:var(--notte-scura)}
+
+/* ── sezioni ── */
+.sezione{padding:clamp(3rem,7vw,6rem) var(--lato)}
+.sezione__testa{max-width:60rem;margin-bottom:clamp(1.5rem,3vw,2.6rem)}
+.sezione__k{margin:0 0 .5rem;font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--arancio-scuro)}
+.sezione__p{font-size:clamp(1.05rem,1.4vw,1.2rem);max-width:44rem;color:var(--grigio)}
+.sezione--banco{background:var(--crema)}
+.sezione--signore{background:var(--bianco)}
+.sezione--voci{background:var(--crema-scura)}
+.sezione--orari{background:var(--notte);color:var(--crema)}
+.sezione--orari .sezione__k{color:var(--arancio-chiaro)}
+.sezione--orari .sezione__p{color:rgba(251,245,234,.85)}
+.sezione--dove{background:var(--bianco)}
+
+/* ── i cartellini: come quelli arancioni dei loro scaffali, ma con le parole ── */
+.cartellino{display:inline-flex;align-items:center;gap:.6em;position:relative;margin:0 0 .7rem;padding:.38em .95em .38em 1.5em;background:var(--arancio);color:#fff;font-weight:700;font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;border-radius:4px 999px 999px 4px;box-shadow:0 3px 8px rgba(43,27,18,.18)}
+.cartellino::before{content:"";position:absolute;left:.55em;top:50%;width:.5em;height:.5em;transform:translateY(-50%);border-radius:50%;background:var(--crema);box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+.cartellino--conta{margin:0;padding-right:.4em}
+.cartellino--conta b{display:inline-grid;place-items:center;min-width:2em;height:2em;padding:0 .4em;border-radius:999px;background:var(--crema);color:var(--arancio-scuro);font-size:1rem;letter-spacing:0}
+
+/* ── le mensole: la vetrina, una lastra chiara col riflesso e le cose che ci stanno sopra ── */
+.mensole{list-style:none;margin:0;padding:0;display:grid;gap:clamp(2.2rem,4.5vw,3.6rem);max-width:74rem}
+.mensola{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(1rem,3vw,2.6rem);align-items:end;padding:0 clamp(.9rem,2vw,1.8rem) 1.6rem}
+.mensola::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;border-radius:3px;background:linear-gradient(180deg,#FFFFFF,#DCE7EC 45%,#A9BEC9);box-shadow:0 16px 24px -8px rgba(43,27,18,.38),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(43,27,18,.15)}
+.mensola::before{content:"";position:absolute;left:3%;right:3%;bottom:-8px;height:8px;border-radius:50%;background:rgba(43,27,18,.14);filter:blur(5px)}
+.mensola:nth-child(even) .mensola__foto{order:-1}
+.mensola--senza{grid-template-columns:1fr;padding-bottom:1.3rem}
+.mensola--doppia{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.mensola__testo{max-width:36rem;padding-bottom:.4rem}
+.mensola__testo h3{margin-bottom:.4rem}
+.mensola__testo p{margin:0;color:var(--grigio)}
+.mensola__foto{margin:0;width:100%;max-width:380px;justify-self:center}
+.mensola__foto figcaption{margin-top:.45rem;font-size:.85rem;color:var(--grigio)}
+.mensola__foto--due{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;max-width:520px}
+.mensola__foto--due figure{margin:0}
+.shot{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;font:inherit;color:inherit;border-radius:12px;overflow:hidden;box-shadow:0 10px 26px rgba(43,27,18,.16)}
+.shot img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .5s}
+.shot--largo img{aspect-ratio:16/10}
+.shot:hover img{transform:scale(1.03)}
+
+/* ── le signore ── */
+.signore{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(1.5rem,4vw,4rem);align-items:center}
+.contati{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.6rem}
+.contati__cap{margin:.9rem 0 0;font-size:.85rem;color:var(--grigio)}
+.signore__foto{margin:0;border-radius:18px;overflow:hidden;box-shadow:0 20px 46px rgba(43,27,18,.22);background:var(--notte)}
+.signore__foto img{width:100%;height:auto}
+.signore__foto figcaption{padding:.6rem .9rem;font-size:.85rem;color:rgba(251,245,234,.8);background:var(--notte)}
+
+/* ── voci ── */
+.voci{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1rem;max-width:74rem}
+.voce{margin:0;padding:1.3rem 1.4rem;background:var(--bianco);border-left:6px solid var(--arancio);border-radius:0 16px 16px 0;display:grid;gap:.7rem;align-content:start}
+.voce p{margin:0;font-size:1.02rem;line-height:1.55}
+.voce cite{font-style:normal;font-size:.85rem;font-weight:600;color:var(--grigio)}
+
+/* ── orari: il cartello (firma) e la tabella ── */
+.orari-griglia{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"intro cartello" "dati cartello";gap:clamp(1.2rem,3vw,2.5rem) clamp(1.5rem,5vw,5rem);align-items:start}
+.orari__intro{grid-area:intro}
+.orari__dati{grid-area:dati}
+.orari-griglia .cartello{grid-area:cartello;align-self:start}
+.orari{width:100%;max-width:34rem;border-collapse:collapse;background:rgba(255,255,255,.06);border-radius:16px;overflow:hidden;margin:.4rem 0 1.4rem}
+.orari caption{text-align:left;font-weight:700;font-size:1.1rem;padding:0 0 .5rem}
+.orari td{padding:.55rem .9rem;border-bottom:1px solid rgba(251,245,234,.12);font-size:1rem}
+.orari td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.orari tr:last-child td{border-bottom:0}
+.orari tr.is-today td{background:rgba(247,161,27,.18);font-weight:700}
+.orari__foto{margin:0;max-width:220px}
+.orari__foto .shot img{aspect-ratio:3/4}
+.orari__foto figcaption{margin-top:.45rem;font-size:.85rem;color:rgba(251,245,234,.7)}
+.cartello{--d:clamp(96px,11vw,132px);position:relative;display:grid;gap:.45rem;justify-items:center;width:min(100%,440px);padding:1.5rem 1.2rem 1.3rem;background:var(--rosso);color:#fff;border-radius:6px;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 7px var(--rosso),inset 0 0 0 9px rgba(255,255,255,.8),0 26px 54px rgba(0,0,0,.5);justify-self:end}
+.cartello__t{margin:.5rem 0 .2rem;font-weight:700;font-size:clamp(1.25rem,2.5vw,1.8rem);letter-spacing:.06em;text-transform:uppercase;line-height:1;text-align:center}
+.cartello__t small{text-transform:none;font-weight:500;font-size:.72em;letter-spacing:0}
+.cartello__f{margin:.35rem 0 0;font-weight:700;font-size:1.1rem;letter-spacing:.05em}
+.cartello__riga{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;width:100%;justify-items:center}
+.cartello__cella{display:grid;justify-items:center;gap:.3rem}
+.cartello__l{font-weight:600;font-size:.95rem;letter-spacing:.06em}
+.cartello__chiuso{margin:.7rem 0 0;font-weight:700;letter-spacing:.08em;display:flex;gap:.6rem;align-items:baseline}
+.cartello__chiuso em{font-style:normal;padding:.15em .8em;background:#fff;color:var(--rosso);border-radius:3px;font-weight:700;letter-spacing:.02em}
+
+/* ── dove ── */
+.dove{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,4rem);align-items:start}
+.dove__ind{margin:.4rem 0 1.2rem;font-size:1.05rem;line-height:1.5}
+.dove__azioni{display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:1.4rem}
+.dove__foto{margin:0;max-width:440px;border-radius:12px;overflow:hidden;box-shadow:0 10px 26px rgba(43,27,18,.16)}
+.dove__foto figcaption{padding:.5rem .8rem;font-size:.85rem;color:var(--grigio);background:var(--crema)}
+.mappa{margin:0;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(43,27,18,.16)}
+.mappa iframe{display:block;width:100%;height:420px;border:0}
+
+/* ── domande ── */
+.domande{background:var(--crema)}
+.domande h2{margin-bottom:1.4rem}
+.domande details{background:var(--bianco);border-radius:14px;margin-bottom:.6rem;max-width:52rem}
+.domande summary{cursor:pointer;padding:1rem 1.2rem;font-weight:700;font-size:1.12rem;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+.domande summary::-webkit-details-marker{display:none}
+.domande summary::after{content:'+';font-weight:700;color:var(--arancio);flex:none}
+.domande details[open] summary::after{content:'−'}
+.domande details p{margin:0;padding:0 1.2rem 1.1rem;color:var(--grigio)}
+
+/* ── piede ── */
+.piede{padding:clamp(2.5rem,5vw,4rem) var(--lato);background:var(--notte-scura);color:var(--crema);display:grid;grid-template-columns:1fr;gap:1.2rem;align-items:start}
+.piede__m{margin:0;font-family:var(--f-script);font-size:2.2rem;line-height:1;color:var(--arancio-chiaro)}
+.piede__s{margin:.5rem 0 .4rem;font-size:.95rem;color:rgba(251,245,234,.75)}
+.piede__d{margin:0;font-size:.95rem}
+.piede a{color:var(--crema)}
+.piede__b{margin:.5rem 0 0;padding-top:1rem;border-top:1px solid rgba(251,245,234,.18);font-size:.85rem;color:rgba(251,245,234,.65)}
+
+/* ── barra azioni (solo mobile, via plumbing) ── */
+.barra{display:none}
+
+/* ── lightbox ── */
+.lightbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;background:rgba(27,17,11,.95)}
+.lightbox img{max-width:100%;max-height:90vh;width:auto;height:auto;border-radius:8px}
+.lightbox__chiudi{position:absolute;top:1rem;right:1rem;width:48px;height:48px;border:0;border-radius:50%;background:var(--crema);color:var(--notte);font-size:1.6rem;cursor:pointer}
+
+/* ── responsive ── */
+@media (max-width:960px){
+  .nav{display:none}
+  .burger{display:block}
+  .apertura{grid-template-columns:1fr;gap:1.8rem;min-height:auto;padding-top:2rem}
+  .mensola{grid-template-columns:1fr;align-items:start}
+  .mensola:nth-child(even) .mensola__foto{order:0}
+  .mensola__foto{justify-self:start;max-width:420px}
+  .mensola--doppia{grid-template-columns:1fr}
+  .signore,.dove{grid-template-columns:1fr}
+  .orari-griglia{grid-template-columns:1fr;grid-template-areas:"intro" "cartello" "dati"}
+  .cartello{justify-self:start}
+}
+@media (max-width:640px){
+  body{font-size:1.02rem}
+  .testata{gap:.5rem}
+  .marchio{gap:.4rem}
+  .marchio__insegna{font-size:1.25rem;padding:.1em .45em .2em}
+  .marchio__s{display:none}
+  .lingue button{padding:.35em .5em}
+  .insegna{font-size:clamp(2rem,9vw,2.8rem);padding:.3em .7em .45em}
+  .apertura__insegna{white-space:normal;font-size:clamp(1.9rem,8.6vw,2.6rem)}
+  .apertura__h{font-size:clamp(2.8rem,12.5vw,4rem)}
+  .apertura__sub{font-size:1rem}
+  .apertura__ora .orologio{--d:84px}
+  .cartello{--d:clamp(84px,19vw,110px);padding:1.2rem .8rem 1.1rem}
+  .cartello__riga{gap:.6rem}
+  .mensola__foto--due{grid-template-columns:1fr 1fr;gap:.6rem}
+  .mappa iframe{height:280px}
+  .barra{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--notte-scura);border-top:3px solid var(--arancio);transform:translateY(110%);transition:transform .3s}
+  .barra.is-visible{transform:none}
+  .barra a{padding:.8rem .2rem .7rem;text-align:center;font-weight:600;font-size:.9rem;text-decoration:none;color:var(--crema);border-right:1px solid rgba(255,255,255,.12)}
+  .barra a:first-child{background:var(--arancio);color:#3B1F0E}
+  .piede{padding-bottom:5.5rem}
+}
+
+/* ── reduced motion ── */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .intro{display:none}
+  .intro__insegna{animation:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .bottone,.shot img,.lancetta--secondi{transition:none}
+}
